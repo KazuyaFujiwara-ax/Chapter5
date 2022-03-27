@@ -15,8 +15,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let userDefaults = UserDefaults.standard
-        if let storedTodoList = userDefaults.object(forKey: "todoList") as? Data {
+        if let storedTodoList = UserDefaults.standard.object(forKey: "todoList") as? Data {
             do {
                 if let unarchiveTodoList = try NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSArray.self, MyTodo.self], from: storedTodoList) as? [MyTodo] {
                     todoList.append(contentsOf: unarchiveTodoList)
@@ -38,11 +37,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 myTodo.todoTitle = textField.text!
                 self.todoList.insert(myTodo, at: 0)
                 self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: UITableView.RowAnimation.right)
-                let userDefaults = UserDefaults.standard
                 do {
                     let data = try NSKeyedArchiver.archivedData(withRootObject: self.todoList, requiringSecureCoding: true)
-                    userDefaults.set(data, forKey: "todoList")
-                    userDefaults.synchronize()
+                    UserDefaults.standard.set(data, forKey: "todoList")
                 } catch {
                     //none
                 }
@@ -82,9 +79,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.reloadRows(at: [indexPath], with: UITableView.RowAnimation.fade)
         do {
             let data: Data = try NSKeyedArchiver.archivedData(withRootObject: todoList, requiringSecureCoding: true)
-            let userDefaults = UserDefaults.standard
-            userDefaults.set(data, forKey: "todoList")
-            userDefaults.synchronize()
+            UserDefaults.standard.set(data, forKey: "todoList")
         } catch {
             //none
         }
@@ -100,9 +95,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
             do {
                 let data: Data = try NSKeyedArchiver.archivedData(withRootObject: todoList, requiringSecureCoding: true)
-                let userDefaults = UserDefaults.standard
-                userDefaults.set(data, forKey: "todoList")
-                userDefaults.synchronize()
+                UserDefaults.standard.set(data, forKey: "todoList")
             } catch {
                 //none
             }
